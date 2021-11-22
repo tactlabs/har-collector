@@ -10,10 +10,10 @@ if __name__ == "__main__":
   
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
-    path_to_browsermobproxy = "/home/chaaya/softwares/browsermob-proxy-2.1.4-bin/browsermob-proxy-2.1.4/bin/browsermob-proxy"
+    path_to_browsermobproxy = "/home/aravind/Featurepreneur/browsermob-proxy-2.1.4/bin/browsermob-proxy"
   
     # Start the server with the path and port 8090
-    server = Server(path_to_browsermobproxy, options={'port': 8090})
+    server = Server(path_to_browsermobproxy, options={'port': 9090})
     server.start()
   
     # Create the proxy with following parameter as true
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     chrome_options = webdriver.ChromeOptions()
   
     # Chrome will start in Headless mode
-    chrome_options.add_argument('headless')
+    chrome_options.add_argument('--proxy-server={0}".format(proxy.proxy')
   
     # Ignores any certificate errors if there is any
     chrome_options.add_argument("--ignore-certificate-errors")
@@ -33,19 +33,19 @@ if __name__ == "__main__":
   
     # Startup the chrome webdriver with executable path and
     # the chrome options as parameters.
-    driver = webdriver.Chrome(executable_path="/home/chaaya/softwares/chromedriver",
+    driver = webdriver.Chrome(executable_path="/home/aravind/Featurepreneur/chromedriver",
                               options=chrome_options)
   
     # Create a new HAR file of the following domain
     # using the proxy.
-    proxy.new_har("torguard.net/whats-my-ip.php")
+    proxy.new_har("https://torguard.net/whats-my-ip.php",options={'captureHeader':True,'captureContent':True})
   
     # Send a request to the website and let it load
-    driver.get("https://torguard.net/whats-my-ip.php")
+    # driver.get("https://browsermob-proxy-py.readthedocs.io/en/stable/server.html")
 
     driver.get("https://torguard.net/whats-my-ip.php")
   
-  
+    proxy.har
     # Sleeps for 10 seconds
     time.sleep(30)
   
@@ -54,7 +54,9 @@ if __name__ == "__main__":
         json.dump(proxy.har, f)
   
     print("Quitting Selenium WebDriver")
+
     driver.quit()
+    
   
     # Read HAR File and parse it using JSON
     # to find the urls containing images.
