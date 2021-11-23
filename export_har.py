@@ -1,13 +1,20 @@
+from requests.api import options
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from browsermobproxy import Server
 import time
 import json
-  
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+# DesiredCapabilities cap = DesiredCapabilities.chrome();
+# LoggingPreferences logPrefs = new LoggingPreferences();
+# logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+# cap.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+# RemoteWebDriver driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), cap);
   
 # Main Function
 if __name__ == "__main__":
-  
+    
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
     path_to_browsermobproxy = "/home/aravind/Featurepreneur/browsermob-proxy-2.1.4/bin/browsermob-proxy"
@@ -20,37 +27,83 @@ if __name__ == "__main__":
     proxy = server.create_proxy()
   
     # Create the webdriver object and pass the arguments
-    chrome_options = webdriver.ChromeOptions()
+    options = webdriver.ChromeOptions()
   
     # Chrome will start in Headless mode
-    chrome_options.add_argument('--proxy-server={0}".format(proxy.proxy')
+    options.add_argument("--proxy-server={0}".format(proxy.proxy))
   
     # Ignores any certificate errors if there is any
-    chrome_options.add_argument("--ignore-certificate-errors")
-  
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument('--headless')
+    options.add_argument("--disabled")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-ip-pooling")
+    options.add_argument("--disable-async-dns")
+    options.add_argument("--disable-background-mode")
+    options.add_argument("--disable-background-networking")
+    options.add_argument("--disable-bundled-ppapi-flash")
+    options.add_argument("--disable-component-update")
+    options.add_argument("--disable-crl-sets")
+    options.add_argument("--disable-default-apps")
+    options.add_argument("--disable-dhcp-wpad")
+    options.add_argument("--disable-ntp-other-sessions-menu")
+    options.add_argument("--disable-prompt-on-repost")
+    options.add_argument("--disable-restore-session-state")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-translate")
+    options.add_argument("--disable-preconnect")
+    options.add_argument("--disable-web-sockets")
+    options.add_argument("--disable-webgl")
+    options.add_argument("--disable-webaudio")
+    options.add_argument("--no-default-browser-check")
+    options.add_argument("--no-first-run")
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--allow-insecure-localhost")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--no-pings")
+    options.add_argument("--incognito")
+    options.add_argument('--start-maximized')
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-sync-dictionary")
+    options.add_argument("--disable-full-history-sync")
+    options.add_argument("--disable-browser-side-navigation")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--host-resolver-retry-attempts=0")
+    options.add_argument("--single-process")
+    options.add_argument("--dns-prefetch-disable")
+    options.add_argument("--window-size=1920,1200")
+    options.add_argument("--bwsi")
+    options.add_argument("--script-badges")
+    options.add_argument("--reset-variation-state")
+    options.add_argument("--log-net-log=/tmp/chromium.log")
+
+    options.add_argument("--blink-settings=imagesEnabled=false")
+
+    # chrome_options.add_argument("--ignore-certificate-errors")
+    proxy_address = "--proxy=127.0.0.1:%s" % proxy.port
     # Setting up Proxy for chrome
-    chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
+    
   
     # Startup the chrome webdriver with executable path and
     # the chrome options as parameters.
-    driver = webdriver.Chrome(executable_path="/home/aravind/Featurepreneur/chromedriver",
-                              options=chrome_options)
+    driver = webdriver.Chrome(executable_path="/home/aravind/Featurepreneur/chromedriver",service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
+                              options=options)
   
     # Create a new HAR file of the following domain
     # using the proxy.
-    proxy.new_har("https://torguard.net/whats-my-ip.php",options={'captureHeader':True,'captureContent':True})
+    proxy.new_har("www.spaceishare.com",options={'captureHeader':True,'captureContent':True})
   
     # Send a request to the website and let it load
-    # driver.get("https://browsermob-proxy-py.readthedocs.io/en/stable/server.html")
+    driver.get("https://spaceishare.com/")
 
-    driver.get("https://torguard.net/whats-my-ip.php")
+    # driver.get("https://torguard.net/whats-my-ip.php")
   
     proxy.har
     # Sleeps for 10 seconds
-    time.sleep(30)
+    time.sleep(60)
   
     # Write it to a HAR file.
-    with open("network_log1.har", "w") as f:
+    with open("spaceishare.har", "w",encoding="utf-8") as f:
         json.dump(proxy.har, f)
   
     print("Quitting Selenium WebDriver")
