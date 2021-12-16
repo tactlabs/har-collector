@@ -5,7 +5,8 @@ from browsermobproxy import Server
 import time
 import json
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
+from dotenv import load_dotenv
+import os 
 # DesiredCapabilities cap = DesiredCapabilities.chrome();
 # LoggingPreferences logPrefs = new LoggingPreferences();
 # logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
@@ -13,11 +14,21 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 # RemoteWebDriver driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), cap);
   
 # Main Function
+
+load_dotenv()
+DRIVER_PATH = os.environ.get("DRIVER_PATH")
+PROXY_PATH =  os.environ.get("PROXY_PATH")
+
+try:
+    os.mkdir(os.path.join(os.getcwd(),"har-files"))
+except:
+    pass
+
 if __name__ == "__main__":
     
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
-    path_to_browsermobproxy = "/home/aravind/Featurepreneur/browsermob-proxy-2.1.4/bin/browsermob-proxy"
+    path_to_browsermobproxy = PROXY_PATH
   
     # Start the server with the path and port 8090
     server = Server(path_to_browsermobproxy, options={'port': 9090})
@@ -86,24 +97,28 @@ if __name__ == "__main__":
   
     # Startup the chrome webdriver with executable path and
     # the chrome options as parameters.
-    driver = webdriver.Chrome(executable_path="/home/aravind/Featurepreneur/chromedriver",service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
   
     # Create a new HAR file of the following domain
     # using the proxy.
-    proxy.new_har("www.spaceishare.com",options={'captureHeader':True,'captureContent':True})
+    proxy.new_har("kijiji",options={'captureHeader':True,'captureContent':True})
   
     # Send a request to the website and let it load
-    driver.get("https://spaceishare.com/")
+    driver.get("https://www.kijijiautos.ca/cars/chevrolet/trax/used/#vip=20039321")
 
     # driver.get("https://torguard.net/whats-my-ip.php")
   
     proxy.har
     # Sleeps for 10 seconds
     time.sleep(60)
+
+    
+    name = url.split('.')[1]
+    print(name)
   
     # Write it to a HAR file.
-    with open("spaceishare.har", "w",encoding="utf-8") as f:
+    with open(f"har-files/{name}.har", "w",encoding="utf-8") as f:
         json.dump(proxy.har, f)
   
     print("Quitting Selenium WebDriver")
