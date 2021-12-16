@@ -106,12 +106,17 @@ def startpy():
     # the chrome options as parameters.
     driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
-  
-    # Create a new HAR file of the following domain
-    # using the proxy.
-    proxy.new_har("kijiji",options={'captureHeader':True,'captureContent':True})
 
     url = "https://www.kijijiautos.ca/cars/chevrolet/trax/used/#vip=20039321"
+
+    name = url.split('.')[1]
+    print(name)
+
+    # Create a new HAR file of the following domain
+    # using the proxy.
+    proxy.new_har(name,options={'captureHeader':True,'captureContent':True})
+
+    
   
     # Send a request to the website and let it load
     driver.get(url)
@@ -122,8 +127,7 @@ def startpy():
     # Sleeps for 10 seconds
     time.sleep(10)
   
-    name = url.split('.')[1]
-    print(name)
+    
   
     # Write it to a HAR file.
     with open(f"har-files/{name}.har", "w",encoding="utf-8") as f:
