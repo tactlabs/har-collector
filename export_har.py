@@ -1,3 +1,11 @@
+'''
+Created on 
+Course work: 
+@author: Chaaya, Aravind
+Source: https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
+    
+'''
+
 from requests.api import options
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -24,8 +32,7 @@ try:
 except:
     pass
 
-if __name__ == "__main__":
-    
+def startpy():
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
     path_to_browsermobproxy = PROXY_PATH
@@ -103,17 +110,18 @@ if __name__ == "__main__":
     # Create a new HAR file of the following domain
     # using the proxy.
     proxy.new_har("kijiji",options={'captureHeader':True,'captureContent':True})
+
+    url = "https://www.kijijiautos.ca/cars/chevrolet/trax/used/#vip=20039321"
   
     # Send a request to the website and let it load
-    driver.get("https://www.kijijiautos.ca/cars/chevrolet/trax/used/#vip=20039321")
+    driver.get(url)
 
     # driver.get("https://torguard.net/whats-my-ip.php")
   
     proxy.har
     # Sleeps for 10 seconds
-    time.sleep(60)
-
-    
+    time.sleep(10)
+  
     name = url.split('.')[1]
     print(name)
   
@@ -126,26 +134,7 @@ if __name__ == "__main__":
     driver.quit()
     
   
-    # Read HAR File and parse it using JSON
-    # to find the urls containing images.
-    # har_file_path = "network_log1.har"
-    # with open(har_file_path, "r") as f:
-    #     logs = json.loads(f.read())
-  
-    # # Store the network logs from 'entries' key and
-    # # iterate them
-    # network_logs = logs['log']['entries']
-    # for log in network_logs:
-  
-    #     # Except block will be accessed if any of the
-    #     # following keys are missing
-    #     try:
-    #         # URL is present inside the following keys
-    #         url = log['request']['url']
-  
-    #         # Checks if the extension is .png or .jpg
-    #         if url[len(url)-4:] == '.png' or url[len(url)-4:] == '.jpg':
-    #             print(url, end="\n\n")
-    #     except Exception as e:
-    #         # print(e)
-    #         pass
+
+if __name__ == "__main__":
+    startpy()    
+    
