@@ -15,24 +15,105 @@ import json
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from dotenv import load_dotenv
 import os 
-# DesiredCapabilities cap = DesiredCapabilities.chrome();
-# LoggingPreferences logPrefs = new LoggingPreferences();
-# logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-# cap.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-# RemoteWebDriver driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), cap);
-  
-# Main Function
+from lxml import etree
+import json
+from pprint import pprint
+import pandas as pd
+from pandas import *
 
 load_dotenv()
 DRIVER_PATH = os.environ.get("DRIVER_PATH")
 PROXY_PATH =  os.environ.get("PROXY_PATH")
+
+with open('data.csv','w'):
+            pass
 
 try:
     os.mkdir(os.path.join(os.getcwd(),"har-files"))
 except:
     pass
 
-def startpy():
+    
+def get_html(json_data):
+    entries = json_data['log']['entries']
+    for i in range(0, len(entries)):
+        if "text/html" in entries[i]['response']['content']['mimeType']:
+            try:
+                html =  entries[i]['response']['content']['text']
+                print(i)
+                # with open("test.html", 'w') as fp:
+                #     fp.write()
+                return html
+            except:
+                print("no html content")
+                continue
+
+
+def parser():
+
+    raw_json = [
+        {
+            "field": "description",
+            "type": "xpath",
+            "path": "//div[@itemprop='description']/text()",
+            "endpoint": "abt.com"
+        },
+        {
+            "field": "title",
+            "type": "xpath",
+            "path": "//h1[@class='title-2323565163']/text()",
+            "endpoint": ""
+        },
+        {
+            "field": "location",
+            "type": "xpath",
+            "path": "//span[@class='address-3617944557']/text()",
+            "endpoint": ""
+        },
+        {
+            "field": "price",
+            "type": "xpath",
+            "path": "//span[@itemprop='price'][1]/text()",
+            "endpoint": ""
+        }
+    ]
+
+    parse_response = {}
+
+    files = os.listdir("har-files")
+    for file1 in files:
+        f = open(f"har-files/{file1}")
+
+        data = json.load(f)
+
+        html = get_html(data)
+        # html = clean_data(html)
+        tree = etree.HTML(html)
+
+        for entry in range(len(raw_json)):
+
+            # print("entry: ",entry)
+
+            # print(raw_json[entry].get("path"))
+
+            val = tree.xpath(raw_json[entry]["path"])
+
+            parse_response[raw_json[entry]["field"]] = [val]
+
+        
+        for response in parse_response.values():
+            while(' ' in response):
+                response.remove(' ')
+            
+        df = pd.DataFrame.from_dict(parse_response)
+        pprint(parse_response)
+        if os.stat("data.csv").st_size == 0:
+            df.to_csv('data.csv', mode='a', index = False, header = True)
+        else:
+            df.to_csv("data.csv", mode='a', index = False, header = False)
+    # return text_list, field
+
+def har_download(url):
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
     path_to_browsermobproxy = PROXY_PATH
@@ -107,7 +188,7 @@ def startpy():
     driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
 
-    url = "https://www.kijiji.ca/v-cars-trucks/new-glasgow-ns/2019-gmc-sierra-1500/m2908934?undefined"
+    # url = "https://www.kijijiautos.ca/cars/chevrolet/trax/used/#vip=20039321"
 
     link = url.split('/')[2]
     title = url.split('/')[-2]
@@ -140,8 +221,20 @@ def startpy():
     print("Quitting Selenium WebDriver")
 
     driver.quit()
-    
-  
+
+
+
+
+def startpy():
+    data = read_csv("car_links.csv")
+
+    urls = data['0'].to_list()
+    urls = urls[:10]
+
+    for url in urls:
+        har_download(url)
+
+    parser()
 
 if __name__ == "__main__":
     startpy()  
