@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}CSV : Download{% endblock %}
+{% block content %}
+
+    <h2 align="center">CSV : Download</h2>
+    <form align="center" action="/download" method="get">
+    <p align="center">Your file is ready</p>
+    <p align="center">Download your file from here!</p>
+    <p align="center"><input type="submit" value="Download"/> </p>
+    </form>
+    <form action="/download">
+{% endblock %}
