@@ -47,7 +47,7 @@ def parser():
 
     parse_response = {}
 
-    f = open("manual-har/kijiji.har")
+    f = open("har-files/kijiji-2020-ford-f150-xlt.har")
 
     data = json.load(f)
 
@@ -71,7 +71,6 @@ def parser():
             response.remove(' ')
         
 
-    
 
 
     # print(xpaths)
