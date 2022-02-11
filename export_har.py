@@ -128,7 +128,7 @@ def get_driver():
     options.add_argument("--blink-settings=imagesEnabled=false")
 
     # chrome_options.add_argument("--ignore-certificate-errors")
-    proxy_address = "--proxy=127.0.0.1:%s" % proxy.port
+    proxy_address = "--proxy=52.23.233.42:%s" % proxy.port
     # Setting up Proxy for chrome
     
   
