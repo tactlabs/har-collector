@@ -32,7 +32,7 @@ try:
 except:
     pass
 
-def startpy():
+def collect_data(url):
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
     path_to_browsermobproxy = PROXY_PATH
@@ -107,7 +107,7 @@ def startpy():
     driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
 
-    url = "https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693"
+ 
 
     link = url.split('/')[2]
     title = url.split('/')[-2]
@@ -141,6 +141,12 @@ def startpy():
 
     driver.quit()
     
+def startpy():
+    url = "https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693"
+
+    collect_data(url)
+
+
   
 
 if __name__ == "__main__":
