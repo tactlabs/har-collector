@@ -146,8 +146,8 @@ def startpy():
 
     collect_data(url)
 
-
-  
+def collect_multiple():
+     url_list
 
 if __name__ == "__main__":
     startpy()  
