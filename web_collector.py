@@ -15,6 +15,27 @@ from bs4 import BeautifulSoup
 import csv
 import time
 
+
+def read_file():
+
+    # open the data file
+    file = open("urls.txt")
+    
+    # read the file as a list
+    data = file.readlines()
+    
+    # close the file
+    file.close()
+
+    new_data = []
+    for item in data:
+        item = item.replace('\n', '')
+        print(f'item : {item}')
+        new_data.append(item)
+
+    # print(data)
+    return new_data
+
 def test():
 
     URL = "http://www.values.com/inspirational-quotes"
@@ -68,6 +89,7 @@ def collect_multiple(url_list):
 
     print('All URLs collected')
 
+
 def startpy():
 
     '''
@@ -77,13 +99,16 @@ def startpy():
 
     # collect_data_single("https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344600")
 
-    url_list = [
-        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344600',
-        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693'
-    ]
+    # url_list = [
+    #     'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344600',
+    #     'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693'
+    # ]
 
+    # collect_multiple(url_list)
+
+    url_list = read_file()
+    print(url_list)
     collect_multiple(url_list)
-    
 
 if __name__ == "__main__":
     startpy() 
