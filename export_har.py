@@ -32,7 +32,37 @@ try:
 except:
     pass
 
-def collect_data(url):
+def collect_data(driver, proxy, url):
+    
+    link    = url.split('/')[2]
+    title   = url.split('/')[-2]
+    website = link.split('.')[1]
+
+    name    = website+'-'+title
+    print(f'Name : {name}')
+
+    # Create a new HAR file of the following domain
+    # using the proxy.
+    proxy.new_har(name,options={'captureHeader':True,'captureContent':True})
+  
+    # Send a request to the website and let it load
+    driver.get(url)
+  
+    proxy.har
+    
+    # Sleeps for 10 seconds
+    time.sleep(10)
+  
+    # Write it to a HAR file.
+    with open(f"har-files/{name}.har", "w",encoding = "utf-8") as f:
+        json.dump(proxy.har, f)
+  
+    print(f"Collected data for {url}")
+    
+
+
+def get_driver():
+
     # Enter the path of bin folder by
     # extracting browsermob-proxy-2.1.4-bin
     path_to_browsermobproxy = PROXY_PATH
@@ -107,47 +137,28 @@ def collect_data(url):
     driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
 
- 
+    return driver, proxy
 
-    link = url.split('/')[2]
-    title = url.split('/')[-2]
-    website = link.split('.')[1]
+def collect_multiple(url_list):
 
-    name = website+'-'+title
-    print(name)
-
-    # Create a new HAR file of the following domain
-    # using the proxy.
-    proxy.new_har(name,options={'captureHeader':True,'captureContent':True})
-
+    driver, proxy = get_driver()
     
-  
-    # Send a request to the website and let it load
-    driver.get(url)
-
-    # driver.get("https://torguard.net/whats-my-ip.php")
-  
-    proxy.har
-    # Sleeps for 10 seconds
-    time.sleep(10)
-  
-    
-  
-    # Write it to a HAR file.
-    with open(f"har-files/{name}.har", "w",encoding="utf-8") as f:
-        json.dump(proxy.har, f)
-  
-    print("Quitting Selenium WebDriver")
+    for url in url_list:
+        collect_data(driver, proxy, url)
 
     driver.quit()
-    
+
 def startpy():
-    url = "https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693"
+    
+    # url = "https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693"
+    # collect_data(url)
 
-    collect_data(url)
+    url_list = [
+        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344600',
+        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693'
+    ]
 
-def collect_multiple():
-     url_list
+    collect_multiple(url_list)
 
 if __name__ == "__main__":
     startpy()  
