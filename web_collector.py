@@ -15,6 +15,12 @@ from bs4 import BeautifulSoup
 import csv
 import time
 
+import logging
+
+logging.basicConfig(
+    filename = 'datacollector.log', 
+    level = logging.DEBUG
+)
 
 def read_file():
 
@@ -70,10 +76,15 @@ def collect_data_single(url):
     soup = BeautifulSoup(source, "lxml")
 
     # Sleep 10 seconds as a testing to slow down things
-    time.sleep(10)
+    # time.sleep(10)
 
     title = soup.find('title').string
-    print(f'title: {title}')
+    logging.info(f'title: {title}')
+
+    if(not title or 'Not Found' in title):
+        logging.error('404 Error Found')
+    else:
+        logging.info(f'url : {url}, title : {title}')
 
     # article = soup.find("article", class_ = "content post-249781 post type-post status-publish format-standard hentry category-python tag-python-list-programs tag-python-list")
     # article_text = article.find("div", class_ = "text")
@@ -84,7 +95,7 @@ def collect_data_single(url):
 def collect_multiple(url_list):
     
     for url in url_list:
-        print(f'collecting url : {url}')
+        # print(f'collecting url : {url}')
         collect_data_single(url)
 
     print('All URLs collected')
