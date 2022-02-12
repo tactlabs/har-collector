@@ -14,47 +14,49 @@ import requests
 from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup
 import lxml
-import pandas as pd
+# import pandas as pd
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from urllib.error import URLError
 import csv
 import logging
+import random
 
 logging.basicConfig(
-    filename = 'datacollector.log', 
-    level = logging.DEBUG
+    filename    = 'datacollector.log', 
+    level       = logging.DEBUG
 )
 
+LINK_FILEPATH = "kijiji_cars_links.txt"
+DEST_FILEPATH = 'output1.csv'
 
 def getTitle(soup):
     try:
-        return soup.find('h1', class_="title-2323565163").text
+        return soup.find('h1', class_ = "title-2323565163").text
     except:
         return "None"
 
 def getInfo(soup):
     try:
-        return soup.find('span', class_="currentPrice-2842943473").text
+        return soup.find('span', class_ = "currentPrice-2842943473").text
     except:
         return "None"
 
 def getDescription(soup):
     try:
-        return soup.find('div', class_="descriptionContainer-231909819").text
+        return soup.find('div', class_ = "descriptionContainer-231909819").text
     except:
         return "None"
 
 def getApplication(soup):
     try:
-        return soup.find('span', class_="address-3617944557").text
+        return soup.find('span', class_ = "address-3617944557").text
     except:
         return "None"   
 
 def collectpy(urlList):
 
-
-    with open('output1.csv', 'w', newline='')  as f_output:
+    with open(DEST_FILEPATH, 'w', newline = '')  as f_output:
         csv_output = csv.writer(f_output)
         csv_output.writerow(['Title', 'Info', 'Desc', 'Application'])
         
@@ -74,10 +76,43 @@ def collectpy(urlList):
                 # print(row)
                 csv_output.writerow(row)
 
-def read_file():
+def get_random_number():
+
+    return random.randint(10, 100)
+
+# Not used as it is not very effective for our business case
+def match_item(c_rand_number, index):
+
+    if(c_rand_number % 5 == index):
+        print(f'entered_5: {c_rand_number}, {index}')
+        return True
+
+    if(c_rand_number % 4 == index):
+        print(f'entered_4: {c_rand_number}, {index}')
+        return True
+
+    if(c_rand_number % 3 == index):
+        print(f'entered_3: {c_rand_number}, {index}')
+        return True
+
+    if(c_rand_number % 9 == index):
+        print(f'entered_9: {c_rand_number}, {index}')
+        return True
+
+    if(c_rand_number % 11 == index):
+        print(f'entered_11: {c_rand_number}, {index}')
+        return True
+
+    if(c_rand_number % 2 == index):
+        print(f'entered_2: {c_rand_number}, {index}')
+        return True
+
+    return False
+
+def read_file(inject_random_error = False):
 
     # open the data file
-    file = open("kijiji_cars_links.txt", "r")
+    file = open(LINK_FILEPATH, "r")
     
     # read the file as a list
     data = file.readlines()
@@ -86,9 +121,15 @@ def read_file():
     file.close()
 
     new_data = []
-    for item in data:
+    for index, item in enumerate(data):
         item = item.replace('\n', '')
-        # print(f'item : {item}')
+
+        if(index % 6 == 0):
+
+            item = str(item) + 'sdi3739djysy'
+
+            print(f'{index} : item : {item}')
+
         new_data.append(item)
 
     # print(new_data)
@@ -97,11 +138,7 @@ def read_file():
 def startpy():
 
     urlList = read_file()
-#     urlList = ["https://www.kijiji.ca/v-cars-trucks/timmins/2018-chevrolet-silverado/m2731021",
-# "https://www.kijiji.ca/v-cars-trucks/brantford/2020-chevrolet-corvette-2dr-stingray-cpe-2lt-glass-roof-front-lift/m2582223",
-# "https://www.kijiji.ca/v-cars-trucks/st-catharines/2018-hyundai-santa-fe-xl-xl-premium-all-wheel-drive-7-passenger/m2522768"]
-
-    collectpy(urlList)
+    # collectpy(urlList)
 
 if __name__ == "__main__":
     startpy()  
