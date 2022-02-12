@@ -2,6 +2,6 @@ selenium
 beautifulsoup4
 html5lib
 requests
-urllib
+urllib3
 python-csv
 logging
