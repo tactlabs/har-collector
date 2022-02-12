@@ -153,13 +153,7 @@ def f(x):
 
 signal.signal(signal.SIGINT, exit_chld)    
 
-def startpy():
-
-    urlList = read_file()
-
-    logging.info(f'collecting ddata first time')
-    collectpy(urlList)
-
+def run_cpu_code():
 
     logging.info(f'Running CPU Intensive Code')
     processes = cpu_count() - 1
@@ -170,6 +164,14 @@ def startpy():
     pool = Pool(processes)
     pool.map(f, range(processes))
 
+def startpy():
+
+    urlList = read_file()
+
+    logging.info(f'collecting ddata first time')
+    collectpy(urlList)
+
+    run_cpu_code()
 
     logging.info(f'collecting ddata sceond time')
     collectpy(urlList[0:10])
