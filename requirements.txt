@@ -1,6 +1,2 @@
-selenium
 beautifulsoup4
-html5lib
-requests
 urllib3
-python-csv

@@ -10,11 +10,7 @@ Source:
     
 '''
 
-import requests
 from bs4 import BeautifulSoup
-from bs4 import BeautifulSoup
-import lxml
-# import pandas as pd
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from urllib.error import URLError
