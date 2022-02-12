@@ -64,6 +64,7 @@ def collectpy(urlList):
             print(url)
             try:
                 html = urlopen(url)
+                logging.info(f'url collected : {url}')
             except HTTPError as http_err:
                 print(f'http error : {http_err},')
                 logging.error(f'http error : {http_err}')
@@ -138,7 +139,7 @@ def read_file(inject_random_error = False):
 def startpy():
 
     urlList = read_file()
-    # collectpy(urlList)
+    collectpy(urlList)
 
 if __name__ == "__main__":
     startpy()  
