@@ -4,4 +4,3 @@ html5lib
 requests
 urllib3
 python-csv
-logging
