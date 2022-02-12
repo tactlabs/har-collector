@@ -3,7 +3,7 @@ Created on
 
 Course work: 
 
-@author: Ana
+@author: Ana, Chaaya, Sanjju, Ishita
 
 Source: 
 
@@ -21,11 +21,12 @@ from urllib.error import URLError
 import csv
 
 
+
 def getTitle(soup):
     return soup.find('h1', class_="title-2323565163").text
 
 def getInfo(soup):
-    return soup.find('ul', class_="itemAttributeList-1090551278").text
+    return soup.find('span', class_="currentPrice-2842943473").text
 
 def getDescription(soup):
     return soup.find('div', class_="descriptionContainer-231909819").text
@@ -33,24 +34,52 @@ def getDescription(soup):
 def getApplication(soup):
     return soup.find('span', class_="address-3617944557").text
 
-urlList =  [
-        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344600',
-        'https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693'
-    ]
 
-with open('output.csv', 'w', newline='')  as f_output:
-    csv_output = csv.writer(f_output)
-    csv_output.writerow(['Title', 'Info', 'Desc', 'Application'])
+def collectpy(urlList):
+
+
+    with open('output.csv', 'w', newline='')  as f_output:
+        csv_output = csv.writer(f_output)
+        csv_output.writerow(['Title', 'Info', 'Desc', 'Application'])
+        
+        for url in urlList:
+            try:
+                html = urlopen(url)
+            except HTTPError as http_err:
+                print(f'http error : {http_err}')
+            except URLError as url_err:
+                print(f'url error : {url_err}')
+            else:
+                soup = BeautifulSoup(html.read(),"html5lib")
+                row = [getTitle(soup), getInfo(soup), getDescription(soup)]
+                # print(row)
+                csv_output.writerow(row)
+
+def read_file():
+
+    # open the data file
+    file = open("kijiji_cars_links.txt", "r")
     
-    for url in urlList:
-        try:
-            html = urlopen(url)
-        except HTTPError as e:
-            print(e)
-        except URLError:
-            print("error")
-        else:
-            soup = BeautifulSoup(html.read(),"html5lib")
-            row = [getTitle(soup), getInfo(soup), getDescription(soup), getApplication(soup)]
-            print(row)
-            csv_output.writerow(row)
+    # read the file as a list
+    data = file.readlines()
+    
+    # close the file
+    file.close()
+
+    new_data = []
+    for item in data:
+        item = item.replace('\n', '')
+        print(f'item : {item}')
+        new_data.append(item)
+
+    # print(data)
+    return new_data
+
+def startpy():
+
+    urlList = read_file()
+
+    collectpy(urlList)
+
+if __name__ == "__main__":
+    startpy()  
