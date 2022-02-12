@@ -1,3 +1,15 @@
+'''
+Created on 
+
+Course work: 
+
+@author: Ana
+
+Source: 
+
+    
+'''
+
 import requests
 from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup
