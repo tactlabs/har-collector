@@ -171,7 +171,7 @@ def startpy():
     logging.info(f'collecting ddata first time')
     collectpy(urlList)
 
-    run_cpu_code()
+    # run_cpu_code()
 
     logging.info(f'collecting ddata sceond time')
     collectpy(urlList[0:10])
