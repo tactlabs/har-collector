@@ -1,5 +1,7 @@
 selenium
-browsermob-proxy
-python-dotenv
-requests-api
-lxml
+beautifulsoup4
+html5lib
+requests
+urllib
+python-csv
+logging
