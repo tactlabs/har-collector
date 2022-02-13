@@ -118,7 +118,7 @@ def read_file(inject_random_error = False):
     # close the file
     file.close()
 
-    new_data = []
+    new_data =[]
     for index, item in enumerate(data):
         item = item.replace('\n', '')
 
@@ -131,7 +131,7 @@ def read_file(inject_random_error = False):
         new_data.append(item)
 
     # print(new_data)
-    return new_data
+    return new_data[ 0:100]
 
 stop_loop = 0
 
@@ -169,10 +169,10 @@ def startpy():
     logging.info(f'collecting ddata first time')
     collectpy(urlList)
 
-    run_cpu_code()
+    # run_cpu_code()
 
-    logging.info(f'collecting ddata sceond time')
-    collectpy(urlList[0:10])
+    # logging.info(f'collecting ddata sceond time')
+    # collectpy(urlList[0:10])
 
 if __name__ == "__main__":
     startpy()  
