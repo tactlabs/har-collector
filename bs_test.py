@@ -65,11 +65,9 @@ def collectpy(urlList):
                 html = urlopen(url)
                 logging.info(f'url collected : {url}')
             except HTTPError as http_err:
-                print(f'http error : {http_err},')
-                logging.error(f'http error : {http_err}')
+                logging.error(f'TACT_ERROR: http error : {http_err}')
             except URLError as url_err:
-                print(f'url error : {url_err}')
-                logging.error(f'url error : {url_err}')
+                logging.error(f'TACT_ERROR: url error : {url_err}')
             else:
                 soup = BeautifulSoup(html.read(),"html5lib")
                 row = [getTitle(soup), getInfo(soup), getDescription(soup)]
