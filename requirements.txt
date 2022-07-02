@@ -1,5 +1,5 @@
 selenium
 browsermob-proxy
 python-dotenv
-requests-api
+requests
 lxml

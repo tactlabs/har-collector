@@ -107,7 +107,7 @@ def startpy():
     driver = webdriver.Chrome(executable_path=DRIVER_PATH,service_args=[ proxy_address, '--ignore-ssl-errors=yes'],
                               options=options)
 
-    url = "https://www.kijiji.ca/v-cars-trucks/calgary/2020-ford-f150-xlt/m2344693"
+    url = "https://www.chewy.com/pedigree-adult-complete-nutrition/dp/388684"
 
     link = url.split('/')[2]
     title = url.split('/')[-2]
